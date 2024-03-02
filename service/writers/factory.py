@@ -9,6 +9,7 @@ from .mainservice import MainServicePageWriter
 from .service import ServicePageWriter
 from .pricing import PricingPageWriter
 from .about import AboutPageWriter
+from .blog import BlogPageWriter
 
 
 def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
@@ -32,5 +33,7 @@ def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
         return PricingPageWriter(document, data)
     if page_type == PageType.ABOUT:
         return AboutPageWriter(document, data)
+    if page_type == PageType.BLOG:
+        return BlogPageWriter(document, data)
 
     raise ValueError(f'Unknown page type {page_type}')
