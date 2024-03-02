@@ -7,9 +7,13 @@ class BasePageWriter(ABC):
         self.data = data
 
     def write_heading(self, heading: str, level: int) -> None:
-        tag = f'h{level}'
+        if level == 0:
+            text = heading
+        else:
+            tag = f'h{level}'
+            text = self._wrap_tag(tag, heading)
         self.document.add_heading(
-            self._wrap_tag(tag, heading),
+            text,
             level=level,
         )
 
