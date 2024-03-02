@@ -12,7 +12,9 @@ document = Document()
 for i, page_data in enumerate(data['pages'], 1):
     page_data['name'] = f'{i}. {page_data["name"]}'
     writer = get_writer(document, page_data, i)
+    print(f'Writing page {1} using {writer.__class__.__name__}...')
     writer.write()
-    print('Page', i, 'writer:', writer.__class__.__name__)
 
+print('Saving document...')
 document.save('result/partybusfremont.docx')
+print('Done!')
