@@ -12,28 +12,28 @@ from .about import AboutPageWriter
 from .blog import BlogPageWriter
 
 
-def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
+def get_writer(page_number: int, **kwargs) -> BasePageWriter:
     page_type = get_page_type(page_number)
 
     if page_type == PageType.PARTY_BUS:
-        return PartyBusPageWriter(document, data)
+        return PartyBusPageWriter(**kwargs)
     if page_type == PageType.CHARTER_BUT:
-        return CharterBusPageWriter(document, data)
+        return CharterBusPageWriter(**kwargs)
     if page_type == PageType.BUS_FLEET:
-        return BusFleetPageWriter(document, data)
+        return BusFleetPageWriter(**kwargs)
     if page_type == PageType.BUS:
-        return BusPageWriter(document, data)
+        return BusPageWriter(**kwargs)
     if page_type == PageType.LOCATIONS:
-        return LocationPageWriter(document, data)
+        return LocationPageWriter(**kwargs)
     if page_type == PageType.MAIN_SERVICE:
-        return MainServicePageWriter(document, data)
+        return MainServicePageWriter(**kwargs)
     if page_type == PageType.SERVICE:
-        return ServicePageWriter(document, data)
+        return ServicePageWriter(**kwargs)
     if page_type == PageType.PRICING:
-        return PricingPageWriter(document, data)
+        return PricingPageWriter(**kwargs)
     if page_type == PageType.ABOUT:
-        return AboutPageWriter(document, data)
+        return AboutPageWriter(**kwargs)
     if page_type == PageType.BLOG:
-        return BlogPageWriter(document, data)
+        return BlogPageWriter(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
