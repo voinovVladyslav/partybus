@@ -5,6 +5,7 @@ from .charterbus import CharterBusPageWriter
 from .busfleet import BusFleetPageWriter
 from .bus import BusPageWriter
 from .locations import LocationPageWriter
+from .mainservice import MainServicePageWriter
 
 
 def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
@@ -20,5 +21,7 @@ def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
         return BusPageWriter(document, data)
     if page_type == PageType.LOCATIONS:
         return LocationPageWriter(document, data)
+    if page_type == PageType.MAIN_SERVICE:
+        return MainServicePageWriter(document, data)
 
     raise ValueError(f'Unknown page type {page_type}')
