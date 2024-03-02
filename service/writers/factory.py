@@ -7,6 +7,7 @@ from .bus import BusPageWriter
 from .locations import LocationPageWriter
 from .mainservice import MainServicePageWriter
 from .service import ServicePageWriter
+from .pricing import PricingPageWriter
 
 
 def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
@@ -26,5 +27,7 @@ def get_writer(document, data: dict, page_number: int) -> BasePageWriter:
         return MainServicePageWriter(document, data)
     if page_type == PageType.SERVICE:
         return ServicePageWriter(document, data)
+    if page_type == PageType.PRICING:
+        return PricingPageWriter(document, data)
 
     raise ValueError(f'Unknown page type {page_type}')
