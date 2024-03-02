@@ -13,7 +13,5 @@ for i, page_data in enumerate(data['pages'], 1):
     page_data['name'] = f'{i}. {page_data["name"]}'
     writer = get_writer(document, page_data, i)
     writer.write()
-    if i > 10:
-        break
 
 document.save('result/partybusfremont.docx')

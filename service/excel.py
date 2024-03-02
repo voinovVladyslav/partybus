@@ -35,7 +35,6 @@ def aggregate_data(data: list[list]) -> dict:
                 result.append(page_data)
             page_data = {}
 
-
     return {
         'phone': phone,
         'pages': result

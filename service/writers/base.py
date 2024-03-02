@@ -6,16 +6,12 @@ class BasePageWriter(ABC):
         self.document = document
         self.data = data
 
+    def write_title(self, title: str) -> None:
+        self.document.add_heading(title, level=0)
+
     def write_heading(self, heading: str, level: int) -> None:
-        if level == 0:
-            text = heading
-        else:
-            tag = f'h{level}'
-            text = self._wrap_tag(tag, heading)
-        self.document.add_heading(
-            text,
-            level=level,
-        )
+        text = self._wrap_tag(f'h{level}', heading)
+        self.document.add_heading(text, level=level)
 
     def write_paragraph(self, paragraph: str) -> None:
         self.document.add_paragraph(self._wrap_tag('p', paragraph))
