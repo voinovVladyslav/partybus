@@ -7,7 +7,7 @@ class PartyBusPageWriter(BasePageWriter):
         for i, row in enumerate(self.data['rows'], 1):
             if i == 1:
                 self.write_heading(row['heading'], 1)
-            if 2 <= i <= 9:
+            if 2 <= i <= 10:
                 self.write_heading(row['heading'], 2)
             self.write_paragraph(row['paragraph'])
         self.add_page_break()
