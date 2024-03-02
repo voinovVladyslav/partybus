@@ -10,3 +10,4 @@ class PartyBusPageWriter(BasePageWriter):
             if 2 <= i <= 9:
                 self.write_heading(row['heading'], 2)
             self.write_paragraph(row['paragraph'])
+        self.add_page_break()
