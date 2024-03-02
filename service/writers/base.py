@@ -40,7 +40,7 @@ class BasePageWriter(ABC):
             if is_banword(word.lower(), self.banwords):
                 run = paragraph.add_run(word + ' ')
                 run.font.color.rgb = RED
-            elif word.startswith('<strong>') and word.endswith('</strong>'):
+            elif '<strong>' in word and '</strong>' in word:
                 run = paragraph.add_run(word)
                 run.bold = True
             else:
