@@ -19,6 +19,9 @@ class BasePageWriter(ABC):
     def _wrap_tag(self, tag: str, text: str) -> str:
         return f'<{tag}>{text}</{tag}>'
 
+    def add_page_break(self) -> None:
+        self.document.add_page_break()
+
     @abstractmethod
     def write(self) -> None:
         raise NotImplementedError('You must implement write method')

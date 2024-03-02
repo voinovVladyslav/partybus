@@ -13,5 +13,6 @@ for i, page_data in enumerate(data['pages'], 1):
     page_data['name'] = f'{i}. {page_data["name"]}'
     writer = get_writer(document, page_data, i)
     writer.write()
+    print('Page', i, 'writer:', writer.__class__.__name__)
 
 document.save('result/partybusfremont.docx')
