@@ -1,1 +1,1 @@
-pyinstaller -Fw main.py
+pyinstaller --clean --noconfirm --windowed program.py
