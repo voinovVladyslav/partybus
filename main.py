@@ -20,6 +20,7 @@ from PyQt6.QtWidgets import (
     QTextEdit,
     QFileDialog,
 )
+from service.banwords import load_banwords
 
 logger = logging.getLogger('main')
 
@@ -28,11 +29,23 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.configure_window()
+
         self.input_file_path = None
+        self.banwords_file_path = None
+        self.banwords = []
+
         layout = QGridLayout()
 
         input_groupbox = self.configure_input_groupbox()
         layout.addWidget(input_groupbox)
+
+        filter_groupbox = self.configure_filter_groupbox()
+        layout.addWidget(filter_groupbox)
+
+        self.generate_button = QPushButton('Generate')
+        self.generate_button.clicked.connect(self.handle_generate)
+        self.enable_generate_button()
+        layout.addWidget(self.generate_button)
 
         logs_groupbox = self.configure_logs_groupbox()
         layout.addWidget(logs_groupbox)
@@ -41,6 +54,24 @@ class MainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         self.info('Application started')
+
+    def handle_generate(self):
+        try:
+            filename, _ = QFileDialog.getSaveFileName(
+                self, 'Save File', filter='Document Files (*.docx)',
+            )
+            if not filename:
+                self.info('No save file selected')
+                return
+
+            self.info(f'File saved: {filename}')
+        except Exception as e:
+            msg = f'An error occurred while generating the file: {e}'
+            self.info(msg)
+            logger.exception(msg)
+
+    def enable_generate_button(self):
+        self.generate_button.setEnabled(bool(self.input_file_path))
 
     def configure_window(self):
         self.setFixedSize(QSize(400, 500))
@@ -56,7 +87,7 @@ class MainWindow(QMainWindow):
         grid_layout.addWidget(QLabel('Input:'), 0, 0, 1, 1)
         grid_layout.addWidget(self.input_file_text, 0, 1, 1, 2)
 
-        self.input_button = QPushButton('Select File')
+        self.input_button = QPushButton('Browse')
         self.input_button.clicked.connect(self.handle_input_button)
         grid_layout.addWidget(self.input_button, 0, 3, 1, 1)
 
@@ -73,6 +104,39 @@ class MainWindow(QMainWindow):
         self.input_file_path = file_path
         self.input_file_text.setText(file_path)
         self.info(f'Selected input file: {file_path}')
+        self.enable_generate_button()
+
+    def configure_filter_groupbox(self):
+        groupbox = QGroupBox('Filter')
+        grid_layout = QGridLayout()
+        groupbox.setLayout(grid_layout)
+
+        self.banwords_input_text = QLineEdit()
+        grid_layout.addWidget(QLabel('Banwords:'), 0, 0, 1, 1)
+        grid_layout.addWidget(self.banwords_input_text, 0, 1, 1, 2)
+
+        self.select_bandwords_button = QPushButton('Browse')
+        self.select_bandwords_button.clicked.connect(
+            self.handle_select_bandwords_button
+        )
+        grid_layout.addWidget(self.select_bandwords_button, 0, 3, 1, 1)
+
+        return groupbox
+
+    def handle_select_bandwords_button(self):
+        file_path = self.get_file_path(
+            caption='Select Banwords File',
+            filter='Text Files (*.txt)',
+        )
+        if not file_path:
+            self.info('No banwords file selected')
+            return
+        self.banwords_file_path = file_path
+        self.banwords_input_text.setText(file_path)
+        self.info(f'Selected banwords file: {file_path}')
+
+        self.banwords = load_banwords(file_path)
+        self.info(f'Loaded {len(self.banwords)} banwords')
 
     def configure_logs_groupbox(self):
         groupbox = QGroupBox('Logs')
