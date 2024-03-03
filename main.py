@@ -1,10 +1,10 @@
+import sys
 import logging
 from logging.handlers import RotatingFileHandler
-
-import sys
 from datetime import datetime
 from pathlib import Path
 
+from docx import Document
 from PyQt6.QtCore import (
     QSize,
 )
@@ -21,6 +21,8 @@ from PyQt6.QtWidgets import (
     QFileDialog,
 )
 from service.banwords import load_banwords
+from service.excel import read_excel, aggregate_data
+from service.writers.factory import get_writer
 
 logger = logging.getLogger('main')
 
@@ -55,8 +57,30 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
         self.info('Application started')
 
+    def configure_window(self):
+        self.setFixedSize(QSize(400, 400))
+        self.setWindowTitle('Party Bus v1.0')
+
     def handle_generate(self):
         try:
+            data = read_excel(Path(self.input_file_path))
+            data = aggregate_data(data)
+
+            document = Document()
+            for i, page_data in enumerate(data['pages'], 1):
+                page_data['name'] = f'{i}. {page_data["name"]}'
+                kwargs = {
+                    'document': document,
+                    'data': page_data,
+                    'banwords': self.banwords,
+                    'phone': data['phone'],
+                }
+                writer = get_writer(i, **kwargs)
+                self.info(
+                    f'Writing page {i} using {writer.__class__.__name__}...'
+                )
+                writer.write()
+
             filename, _ = QFileDialog.getSaveFileName(
                 self, 'Save File', filter='Document Files (*.docx)',
             )
@@ -64,7 +88,10 @@ class MainWindow(QMainWindow):
                 self.info('No save file selected')
                 return
 
-            self.info(f'File saved: {filename}')
+            self.info(f'Saving document to {filename}...')
+            document.save(filename)
+            self.info('Done!')
+
         except Exception as e:
             msg = f'An error occurred while generating the file: {e}'
             self.info(msg)
@@ -72,10 +99,6 @@ class MainWindow(QMainWindow):
 
     def enable_generate_button(self):
         self.generate_button.setEnabled(bool(self.input_file_path))
-
-    def configure_window(self):
-        self.setFixedSize(QSize(400, 500))
-        self.setWindowTitle('Party Bus v1.0')
 
     def configure_input_groupbox(self):
         groupbox = QGroupBox('Input')
@@ -112,6 +135,7 @@ class MainWindow(QMainWindow):
         groupbox.setLayout(grid_layout)
 
         self.banwords_input_text = QLineEdit()
+        self.banwords_input_text.setReadOnly(True)
         grid_layout.addWidget(QLabel('Banwords:'), 0, 0, 1, 1)
         grid_layout.addWidget(self.banwords_input_text, 0, 1, 1, 2)
 
