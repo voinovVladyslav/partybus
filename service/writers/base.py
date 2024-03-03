@@ -37,16 +37,17 @@ class BasePageWriter(ABC):
         paragraph = self.document.add_paragraph('<p>')
         words = text.split()
         for word in words:
+            word = word + ' '
             if word.startswith('<p>') and not make_phone_bold:
                 word = '\n' + word
             if is_banword(word.lower(), self.banwords):
-                run = paragraph.add_run(word + ' ')
+                run = paragraph.add_run(word)
                 run.font.color.rgb = RED
             elif '<strong>' in word and '</strong>' in word:
                 run = paragraph.add_run(word)
                 run.bold = True
             else:
-                paragraph.add_run(word + ' ')
+                paragraph.add_run(word)
         self.document.add_paragraph('</p>')
 
     def _make_phone_bold(self, text: str) -> str:
