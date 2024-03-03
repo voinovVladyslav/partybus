@@ -197,7 +197,9 @@ if __name__ == '__main__':
         datefmt='%Y-%m-%d %H:%M:%S',
         level=logging.DEBUG,
         handlers=[
-            RotatingFileHandler('logs/logs.log', maxBytes=100000, backupCount=5)
+            RotatingFileHandler(
+                'logs/logs.log', maxBytes=100000, backupCount=5
+            )
         ]
     )
     app = QApplication(sys.argv)
