@@ -1,1 +1,1 @@
-pyinstaller --clean --noconfirm --windowed program.py
+pyinstaller --clean --noconfirm --windowed main.py
