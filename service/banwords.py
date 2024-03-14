@@ -8,6 +8,6 @@ def load_banwords(file_path: Path) -> set[str]:
 
 def is_banword(word: str, banwords: list[str]) -> bool:
     for banword in banwords:
-        if word.startswith(banword):
+        if banword in word:
             return True
     return False
