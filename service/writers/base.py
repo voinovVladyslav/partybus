@@ -1,9 +1,9 @@
-import re
 from abc import ABC, abstractmethod
 
 from docx.shared import RGBColor
 
 from service.banwords import is_banword
+from service.phones import strong_phones
 
 RED = RGBColor(255, 0, 0)
 
@@ -53,9 +53,7 @@ class BasePageWriter(ABC):
     def _make_phone_bold(self, text: str) -> str:
         if not self.phone:
             return text
-        pattern = re.compile(r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}')
-        text, _ = pattern.subn(f'<strong>{self.phone}</strong>', text)
-        return text
+        return strong_phones(text, self.phone)
 
     def _wrap_tag(self, tag: str, text: str) -> str:
         return f'<{tag}>{text}</{tag}>'

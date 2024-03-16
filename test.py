@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -11,6 +12,7 @@ class MainWindow(QMainWindow):
 
     def on_button_clicked(self):
         pass
+
 
 app = QApplication([])
 window = MainWindow()
