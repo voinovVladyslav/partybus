@@ -69,11 +69,11 @@ class MainWindow(QMainWindow):
 
     def handle_generate(self):
         try:
-            data = read_excel(Path(self.input_file_path))
+            data = read_excel(Path(str(self.input_file_path)))
             data = aggregate_data(data)
 
             document = Document()
-            for i, page_data in enumerate(data['pages'], 1):
+            for i, page_data in enumerate(data['pages'][1:], 1):
                 page_data['name'] = f'{i}. {page_data["name"]}'
                 kwargs = {
                     'document': document,
@@ -183,7 +183,7 @@ class MainWindow(QMainWindow):
         self.info(f'Selected banwords file: {file_path}')
 
         self.settings.setValue('banwords_file_path', file_path)
-        self.banwords = load_banwords(file_path)
+        self.banwords = load_banwords(Path(file_path))
         self.info(f'Loaded {len(self.banwords)} banwords')
 
     def configure_logs_groupbox(self):

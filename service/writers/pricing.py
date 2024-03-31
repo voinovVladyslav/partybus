@@ -11,5 +11,5 @@ class PricingPageWriter(BasePageWriter):
                 self.write_heading(row['heading'], 2)
             else:
                 self.write_heading(row['heading'], 3)
-            self.write_paragraph(row['paragraph'])
+            self.write_paragraph(row['paragraph'], make_phone_bold=True)
         self.add_page_break()

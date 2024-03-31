@@ -32,6 +32,11 @@ from service.phones import strong_phones
                 'or <strong>123-456-7890</strong>'
             )
         ),
+        (
+            '38103 (901) 526-0110 <h3>',
+            '123-456-7890',
+            '38103 <strong>123-456-7890</strong> <h3>'
+        ),
     ],
 
 )
