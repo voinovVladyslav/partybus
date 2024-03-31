@@ -13,8 +13,8 @@ class BasePageWriter(ABC):
         self,
         document,
         data: dict,
-        banwords: list[str] = None,
-        phone: str = None,
+        banwords: list[str] | None = None,
+        phone: str | None = None,
     ):
         self.banwords = banwords or []
         self.phone = phone
