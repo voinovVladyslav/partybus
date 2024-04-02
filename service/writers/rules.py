@@ -4,7 +4,6 @@ import enum
 class PageType(str, enum.Enum):
     HOME_PAGE = "home"
     BUS = "bus"
-    BUS_FLEET = "bus-fleet"
     LOCATIONS = "our-locations"
     MAIN_SERVICE = "main-services"
     SERVICE = "service"
@@ -15,13 +14,12 @@ class PageType(str, enum.Enum):
 
 HOME_PAGE = [1]
 BUS_PAGES = range(2, 8)
-BUS_FLEET_PAGES = [8]
-OUR_LOCATIONS_PAGES = [9]
-MAIN_SERVICES = [10]
-SERVICE_PAGES = range(11, 16)
-PRICING_PAGES = [16]
-ABOUT_PAGES = [17]
-BLOG_PAGE = [18]
+OUR_LOCATIONS_PAGES = [8]
+MAIN_SERVICES = [9]
+SERVICE_PAGES = range(10, 15)
+PRICING_PAGES = [15]
+ABOUT_PAGES = [16]
+BLOG_PAGE = [17]
 
 
 def get_page_type(page_number: int) -> PageType:
@@ -29,8 +27,6 @@ def get_page_type(page_number: int) -> PageType:
         return PageType.HOME_PAGE
     if page_number in BUS_PAGES:
         return PageType.BUS
-    if page_number in BUS_FLEET_PAGES:
-        return PageType.BUS_FLEET
     if page_number in OUR_LOCATIONS_PAGES:
         return PageType.LOCATIONS
     if page_number in MAIN_SERVICES:

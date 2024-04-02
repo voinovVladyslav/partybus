@@ -1,6 +1,5 @@
 from .rules import PageType, get_page_type
 from .base import BasePageWriter
-from .busfleet import BusFleetPageWriter
 from .bus import BusPageWriter
 from .locations import LocationPageWriter
 from .mainservice import MainServicePageWriter
@@ -16,8 +15,6 @@ def get_writer(page_number: int, **kwargs) -> BasePageWriter:
 
     if page_type == PageType.HOME_PAGE:
         return HomePageWriter(**kwargs)
-    if page_type == PageType.BUS_FLEET:
-        return BusFleetPageWriter(**kwargs)
     if page_type == PageType.BUS:
         return BusPageWriter(**kwargs)
     if page_type == PageType.LOCATIONS:

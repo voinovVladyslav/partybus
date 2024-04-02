@@ -8,13 +8,16 @@ from service.banwords import load_banwords
 from service.writers.factory import get_writer
 
 
-data = read_excel(Path('examples/new_memphis.xlsx'))
+site_name = 'fort_test'
+
+
+data = read_excel(Path(f'examples/{site_name}.xlsx'))
 data = aggregate_data(data)
 
 banwords = load_banwords(Path('banwords.txt'))
 print(f'Loaded {len(banwords)} banwords')
 
-with open('examples/new_memphis.json', 'w') as f:
+with open(f'examples/{site_name}.json', 'w') as f:
     json.dump(data, f, indent=4)
 
 document = Document()
@@ -31,5 +34,5 @@ for i, page_data in enumerate(data['pages'][1:], 1):
     writer.write()
 
 print('Saving document...')
-document.save('result/result_memphis.docx')
+document.save(f'result/{site_name}.docx')
 print('Done!')
