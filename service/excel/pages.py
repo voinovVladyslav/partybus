@@ -1,18 +1,3 @@
-from pathlib import Path
-
-import pandas as pd
-
-
-def read_excel(file_path: Path, **kwargs):
-    df = pd.read_excel(
-        file_path,
-        header=None,
-        **kwargs
-    )
-    df.fillna('', inplace=True)
-    return df.values.tolist()
-
-
 def aggregate_data(data: list[list]) -> dict:
     phone = data[0][1]
     is_page_active = False
