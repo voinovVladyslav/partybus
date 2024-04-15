@@ -1,20 +1,36 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
+import json
+from pathlib import Path
 
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.button = QPushButton("Click", self)
-        self.button.clicked.connect(self.on_button_clicked)
-
-        self.setCentralWidget(self.button)
-
-    def on_button_clicked(self):
-        pass
+def transpose(data: list[list]) -> list[list]:
+    return list(map(list, zip(*data)))
 
 
-app = QApplication([])
-window = MainWindow()
-window.show()
-app.exec()
+def sort_by_wordcount(data: list[str]) -> list[str]:
+    return sorted(data, key=lambda x: len(x.split()), reverse=True)
+
+
+def get_city_names():
+    pass
+
+
+def aggregate_links():
+    data = json.loads(Path('examples/links_transposed.json').read_text())
+    
+
+    results = []
+    for row in data[1:-2]:
+        header = row[0].strip().lower().replace(' ', '_')
+        link = row[1].strip()
+        links = sort_by_wordcount([str(x).strip() for x in row[2:] if x])
+        results.append({
+            'header': header,
+            'link': link,
+            'keywords': links
+        })
+
+    return results
+
+links = aggregate_links()
+with open('examples/parsed_links.json', 'w') as f:
+    f.write(json.dumps(links, indent=4))

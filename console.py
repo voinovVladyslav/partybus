@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from docx import Document
 
 from service.excel import read_excel, aggregate_data
@@ -5,10 +7,11 @@ from service.banwords import load_banwords
 from service.writers.factory import get_writer
 
 
-data = read_excel('examples/partybusesarlington.xlsx')
+filename = 'richmond'
+data = read_excel(Path(f'examples/{filename}.xlsx'))
 data = aggregate_data(data)
 
-banwords = load_banwords('banwords.txt')
+banwords = load_banwords(Path('banwords.txt'))
 print(f'Loaded {len(banwords)} banwords')
 
 document = Document()
@@ -25,5 +28,5 @@ for i, page_data in enumerate(data['pages'], 1):
     writer.write()
 
 print('Saving document...')
-document.save('result/partybusesarlington.docx')
+document.save(f'result/{filename}.docx')
 print('Done!')

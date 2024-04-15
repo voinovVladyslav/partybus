@@ -3,10 +3,11 @@ from pathlib import Path
 import pandas as pd
 
 
-def read_excel(file_path: Path):
+def read_excel(file_path: Path, **kwargs):
     df = pd.read_excel(
         file_path,
         header=None,
+        **kwargs
     )
     df.fillna('', inplace=True)
     return df.values.tolist()
