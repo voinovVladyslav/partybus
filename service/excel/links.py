@@ -1,7 +1,7 @@
 from .utils import transpose, sort_by_wordcount
 
 
-def aggregate_links(data: list[list]):
+def aggregate_links(data: list[list]) -> list[dict]:
     data = transpose(data)
     results = []
     for row in data[1:-2]:
