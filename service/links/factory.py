@@ -6,6 +6,8 @@ from .partybus import PartyBusLinker
 from .city import CityLinker
 from .busfleet import BusFleetLinker
 from .charterbus import CharterBusLinker
+from .partybus2 import PartyBus2Linker
+from .locations import LocationsLinker
 
 
 def get_linker(page_number: int, **kwargs) -> Linker:
@@ -21,5 +23,9 @@ def get_linker(page_number: int, **kwargs) -> Linker:
         return BusFleetLinker(**kwargs)
     if page_type == LinkerPageType.CHARTER_BUS:
         return CharterBusLinker(**kwargs)
+    if page_type == LinkerPageType.PARTY_BUS_2:
+        return PartyBus2Linker(**kwargs)
+    if page_type == LinkerPageType.LOCATIONS:
+        return LocationsLinker(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
