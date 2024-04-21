@@ -3,15 +3,10 @@ import re
 from .base import Linker
 
 
-class ServicesLinker(Linker):
+class AboutLinker(Linker):
     def filter_patterns(self) -> None:
         exclude = [
-            'services',
-            'airport',
-            'field_trip',
-            'wedding',
-            'corporate',
-            'sports',
+            'about',
             'city_charter_bus',
         ]
         self.patterns = [

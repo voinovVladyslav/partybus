@@ -14,6 +14,8 @@ from .corporate import CorporateLinker
 from .airport import AirportLinker
 from .sports import SportsLinker
 from .fieldtrip import FieldTripLinker
+from .pricing import PricingLinker
+from .about import AboutLinker
 
 
 def get_linker(page_number: int, **kwargs) -> Linker:
@@ -45,5 +47,9 @@ def get_linker(page_number: int, **kwargs) -> Linker:
         return SportsLinker(**kwargs)
     if page_type == LinkerPageType.FIELD_TRIP:
         return FieldTripLinker(**kwargs)
+    if page_type == LinkerPageType.PRICING:
+        return PricingLinker(**kwargs)
+    if page_type == LinkerPageType.ABOUT:
+        return AboutLinker(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
