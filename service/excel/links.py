@@ -1,7 +1,10 @@
+from service.links.utils import render_cities
 from .utils import transpose, sort_by_wordcount
 
 
-def aggregate_links(data: list[list]) -> list[dict]:
+def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
+    if not cities:
+        cities = []
     data = transpose(data)
     results = []
     for row in data[1:-2]:
@@ -11,7 +14,7 @@ def aggregate_links(data: list[list]) -> list[dict]:
         results.append({
             'header': header,
             'link': link,
-            'keywords': links
+            'keywords': render_cities(links, cities)
         })
 
     return results

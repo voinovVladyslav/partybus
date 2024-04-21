@@ -4,6 +4,7 @@ from docx.shared import RGBColor
 
 from service.banwords import is_banword
 from service.phones import strong_phones
+from service.links.base import Linker
 
 RED = RGBColor(255, 0, 0)
 
@@ -13,13 +14,15 @@ class BasePageWriter(ABC):
         self,
         document,
         data: dict,
-        banwords: list[str] = None,
-        phone: str = None,
+        banwords: list[str] | None = None,
+        phone: str | None = None,
+        linker: Linker | None = None,
     ):
         self.banwords = banwords or []
         self.phone = phone
         self.document = document
         self.data = data
+        self.linker = linker
 
     def write_title(self, title: str) -> None:
         self.document.add_heading(title, level=0)
@@ -28,11 +31,22 @@ class BasePageWriter(ABC):
         text = self._wrap_tag(f'h{level}', heading)
         self.document.add_heading(text, level=level)
 
+    def insert_links(self, text: str) -> str:
+        if not self.linker:
+            return text
+        return self.linker.render(text)
+
     def write_paragraph(
-        self, text: str, make_phone_bold: bool = False
+        self, 
+        text: str, 
+        make_phone_bold: bool = False, 
+        insert_links: bool = False,
     ) -> None:
         if make_phone_bold:
             text = self._make_phone_bold(text)
+
+        if insert_links:
+            text = self.insert_links(text)
 
         paragraph = self.document.add_paragraph('<p>')
         words = text.split()

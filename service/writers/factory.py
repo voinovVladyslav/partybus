@@ -1,5 +1,6 @@
 from .rules import PageType, get_page_type
 from .base import BasePageWriter
+from .home import HomePageWriter
 from .partybus import PartyBusPageWriter
 from .charterbus import CharterBusPageWriter
 from .busfleet import BusFleetPageWriter
@@ -15,6 +16,8 @@ from .blog import BlogPageWriter
 def get_writer(page_number: int, **kwargs) -> BasePageWriter:
     page_type = get_page_type(page_number)
 
+    if page_type == PageType.HOME_PAGE:
+        return HomePageWriter(**kwargs)
     if page_type == PageType.PARTY_BUS:
         return PartyBusPageWriter(**kwargs)
     if page_type == PageType.CHARTER_BUT:

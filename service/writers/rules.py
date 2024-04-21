@@ -2,6 +2,7 @@ import enum
 
 
 class PageType(str, enum.Enum):
+    HOME_PAGE = "home"
     PARTY_BUS = "party-bus"
     CHARTER_BUT = "charter-bus"
     BUS_FLEET = "bus-fleet"
@@ -14,7 +15,8 @@ class PageType(str, enum.Enum):
     BLOG = "blog"
 
 
-PARTY_BUS_PAGES = range(1, 14)
+HOME_PAGES = [1]
+PARTY_BUS_PAGES = range(2, 14)
 CHARTER_BUS_PAGES = range(14, 27)
 BUS_FLEET_PAGES = [27]
 BUS_PAGES = range(28, 45)
@@ -27,6 +29,8 @@ BLOG_PAGE = [54]
 
 
 def get_page_type(page_number: int) -> PageType:
+    if page_number in HOME_PAGES:
+        return PageType.HOME_PAGE
     if page_number in PARTY_BUS_PAGES:
         return PageType.PARTY_BUS
     if page_number in CHARTER_BUS_PAGES:
