@@ -6,11 +6,7 @@ class LinkerPageType(str, enum.Enum):
     PARTY_BUS = "party-bus"
     CITY_PAGE = "city-page"
     BUS_FLEET = "bus-fleet"
-    CHARTER_BUS_18 = "charter-bus-18"
-    CHARTER_BUS_20 = "charter-bus-20"
-    CHARTER_BUS_25 = "charter-bus-25"
-    CHARTER_BUS_56 = "charter-bus-56"
-    CHARTER_BUS_SCHOOL = "charter-bus-school"
+    CHARTER_BUS = "charter-bus"
     PARTY_BUS_2 = "party-bus-2"
     LOCATIONS = "our-locations"
     MAIN_SERVICE = "main-services"
@@ -28,11 +24,7 @@ HOME_PAGES = [1]
 PARTY_BUS_PAGES = range(2, 14)
 CITY_PAGES = range(14, 27)
 BUS_FLEET_PAGES = [27]
-CHARTER_BUS_PAGES_18 = [28]
-CHARTER_BUS_PAGES_20 = [29]
-CHARTER_BUS_PAGES_25 = [30]
-CHARTER_BUS_PAGES_56 = [31]
-CHARTER_BUS_PAGES_SCHOOL = [32]
+CHARTER_BUS_PAGES = range(28, 33)
 PARTY_BUS_PAGES_2 = range(33, 45)
 OUR_LOCATIONS_PAGES = [45]
 MAIN_SERVICES = [46]
@@ -51,16 +43,8 @@ def get_linker_page_type(page_number: int) -> LinkerPageType:
         return LinkerPageType.CITY_PAGE
     if page_number in BUS_FLEET_PAGES:
         return LinkerPageType.BUS_FLEET
-    if page_number in CHARTER_BUS_PAGES_18:
-        return LinkerPageType.CHARTER_BUS_18
-    if page_number in CHARTER_BUS_PAGES_20:
-        return LinkerPageType.CHARTER_BUS_20
-    if page_number in CHARTER_BUS_PAGES_25:
-        return LinkerPageType.CHARTER_BUS_25
-    if page_number in CHARTER_BUS_PAGES_56:
-        return LinkerPageType.CHARTER_BUS_56
-    if page_number in CHARTER_BUS_PAGES_SCHOOL:
-        return LinkerPageType.CHARTER_BUS_SCHOOL
+    if page_number in CHARTER_BUS_PAGES:
+        return LinkerPageType.CHARTER_BUS
     if page_number in PARTY_BUS_PAGES_2:
         return LinkerPageType.PARTY_BUS_2
     if page_number in OUR_LOCATIONS_PAGES:
