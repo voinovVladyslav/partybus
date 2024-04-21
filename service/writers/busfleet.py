@@ -9,5 +9,5 @@ class BusFleetPageWriter(BasePageWriter):
                 self.write_heading(row['heading'], 1)
             else:
                 self.write_heading(row['heading'], 2)
-            self.write_paragraph(row['paragraph'])
+            self.write_paragraph(row['paragraph'], insert_links=True)
         self.add_page_break()

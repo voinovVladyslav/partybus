@@ -11,5 +11,6 @@ class PricingPageWriter(BasePageWriter):
                 self.write_heading(row['heading'], 2)
             else:
                 self.write_heading(row['heading'], 3)
-            self.write_paragraph(row['paragraph'])
+            insert_links = i < 8
+            self.write_paragraph(row['paragraph'], insert_links=insert_links)
         self.add_page_break()
