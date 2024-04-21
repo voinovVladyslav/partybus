@@ -24,7 +24,7 @@ raw_links = read_excel(Path('examples/links.xlsx'), sheet_name=1)
 links = aggregate_links(raw_links, city_names)
 
 document = Document()
-for i, page_data in enumerate(data['pages'][:1], 1):
+for i, page_data in enumerate(data['pages'], 1):
     page_data['name'] = f'{i}. {page_data["name"]}'
     linker = get_linker(i, patterns=links)
     kwargs = {
