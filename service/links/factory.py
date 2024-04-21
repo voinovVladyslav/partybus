@@ -51,5 +51,7 @@ def get_linker(page_number: int, **kwargs) -> Linker:
         return PricingLinker(**kwargs)
     if page_type == LinkerPageType.ABOUT:
         return AboutLinker(**kwargs)
+    if page_type == LinkerPageType.BLOG:
+        return Linker(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
