@@ -13,6 +13,6 @@ class CharterBusLinker(Linker):
             'city_party_bus',
         ]
         self.patterns = [
-            pattern for pattern in self.patterns 
+            pattern for pattern in self.patterns
             if pattern['header'] not in exclude
         ]

@@ -10,11 +10,11 @@ class LocationsLinker(Linker):
             'city_charter_bus',
         ]
         self.patterns = [
-            pattern for pattern in self.patterns 
+            pattern for pattern in self.patterns
             if pattern['header'] not in exclude
         ]
         exclude_patterns = [
-            re.compile(r'^\d\d-passenger$'), 
+            re.compile(r'^\d\d-passenger$'),
             re.compile(r'^\d\d passenger$'),
             re.compile(r'^\d\d-passengers$'),
             re.compile(r'^\d\d passengers$'),
@@ -39,4 +39,3 @@ class LocationsLinker(Linker):
                     keywords.append(keyword)
 
             pattern['keywords'] = keywords
-                

@@ -15,7 +15,6 @@ class BusFleetLinker(Linker):
             'home_page',
         ]
         self.patterns = [
-            pattern for pattern in self.patterns 
+            pattern for pattern in self.patterns
             if pattern['header'] in only
         ]
-

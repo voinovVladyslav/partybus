@@ -10,7 +10,7 @@ class CityLinker(Linker):
             if pattern['header'] != 'city_party_bus'
         ]
         exclude_patterns = [
-            re.compile(r'^\d\d-passenger$'), 
+            re.compile(r'^\d\d-passenger$'),
             re.compile(r'^\d\d passenger$'),
             re.compile(r'^\d\d-passengers$'),
             re.compile(r'^\d\d passengers$'),
@@ -29,5 +29,3 @@ class CityLinker(Linker):
                     keywords.append(keyword)
 
             pattern['keywords'] = keywords
-                
-
