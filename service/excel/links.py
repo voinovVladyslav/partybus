@@ -1,4 +1,4 @@
-from service.links.utils import render_cities
+from service.links.utils import render_cities, render_buses
 from .utils import transpose, sort_by_wordcount
 
 
@@ -14,7 +14,7 @@ def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
         results.append({
             'header': header,
             'link': link,
-            'keywords': render_cities(links, cities)
+            'keywords': render_buses(render_cities(links, cities))
         })
 
     return results

@@ -11,4 +11,3 @@ def get_linker(page_number: int, **kwargs) -> Linker:
         return HomeLinker(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
-

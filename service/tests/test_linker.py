@@ -57,6 +57,20 @@ def test_linker_single_match_with_overlaping_keywords():
         }
     ]
     linker = Linker(patterns)
-    text = 'This is my home country'
+    text = 'This is my home country.'
     rendered_text = linker.render(text)
-    assert rendered_text == 'This is my <a href="/home/">home country</a>'
+    assert rendered_text == 'This is my <a href="/home/">home country</a>.'
+
+
+def test_linker_match_start_of_string():
+    patterns = [
+        {
+            'header': 'Home',
+            'link': '/home/',
+            'keywords': ['country', 'home']
+        }
+    ]
+    linker = Linker(patterns)
+    text = 'country is sdfs'
+    rendered_text = linker.render(text)
+    assert rendered_text == '<a href="/home/">country</a> is sdfs'

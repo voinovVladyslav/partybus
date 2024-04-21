@@ -16,5 +16,5 @@ class HomeLinker(Linker):
         ]
         self.patterns = [
             pattern for pattern in self.patterns if
-            pattern['header'].lower() in headers
+            pattern['header'].lower() not in headers
         ]

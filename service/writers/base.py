@@ -37,9 +37,9 @@ class BasePageWriter(ABC):
         return self.linker.render(text)
 
     def write_paragraph(
-        self, 
-        text: str, 
-        make_phone_bold: bool = False, 
+        self,
+        text: str,
+        make_phone_bold: bool = False,
         insert_links: bool = False,
     ) -> None:
         if make_phone_bold:

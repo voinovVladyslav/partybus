@@ -12,6 +12,6 @@ class HomePageWriter(BasePageWriter):
             make_phone_bold = i <= 10
             insert_links = i > 1
             self.write_paragraph(
-                row['paragraph'], make_phone_bold, insert_links 
+                row['paragraph'], make_phone_bold, insert_links
             )
         self.add_page_break()
