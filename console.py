@@ -35,7 +35,11 @@ for i, page_data in enumerate(data['pages'], 1):
         'linker': linker,
     }
     writer = get_writer(i, **kwargs)
-    print(f'Writing page {i} using {writer.__class__.__name__}...')
+    print(
+        f'Writing page {i} using '
+        f'{writer.__class__.__name__} '
+        f'and {linker.__class__.__name__}...'
+    )
     writer.write()
 
 print('Saving document...')

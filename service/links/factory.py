@@ -9,6 +9,7 @@ from .charterbus import CharterBusLinker
 from .partybus2 import PartyBus2Linker
 from .locations import LocationsLinker
 from .services import ServicesLinker
+from .wedding import WeddingLinker
 
 
 def get_linker(page_number: int, **kwargs) -> Linker:
@@ -30,5 +31,7 @@ def get_linker(page_number: int, **kwargs) -> Linker:
         return LocationsLinker(**kwargs)
     if page_type == LinkerPageType.MAIN_SERVICE:
         return ServicesLinker(**kwargs)
+    if page_type == LinkerPageType.WEDDING:
+        return WeddingLinker(**kwargs)
 
     raise ValueError(f'Unknown page type {page_type}')
