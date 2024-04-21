@@ -5,6 +5,10 @@ from .base import Linker
 
 class CityLinker(Linker):
     def filter_patterns(self) -> None:
+        self.patterns = [
+            pattern for pattern in self.patterns
+            if pattern['header'] != 'city_party_bus'
+        ]
         exclude_patterns = [
             re.compile(r'^\d\d-passenger$'), 
             re.compile(r'^\d\d passenger$'),

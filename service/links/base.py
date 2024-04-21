@@ -3,7 +3,8 @@ from copy import deepcopy
 
 
 class Linker:
-    def __init__(self, patterns: list[dict]):
+    def __init__(self, patterns: list[dict], **kwargs):
+        self.kwargs = kwargs
         self.patterns = deepcopy(patterns)
         self.filter_patterns()
 
