@@ -22,8 +22,14 @@ from PyQt6.QtWidgets import (
     QFileDialog,
 )
 from service.banwords import load_banwords
-from service.excel import read_excel, aggregate_data
+from service.excel import (
+    read_excel,
+    aggregate_data,
+    aggregate_links,
+    get_city_names,
+)
 from service.writers.factory import get_writer
+from service.links.factory import get_linker
 
 COMPANY_NAME = 'Party Bus'
 APPLICATION_NAME = 'Party Bus v1.0'
@@ -71,21 +77,32 @@ class MainWindow(QMainWindow):
 
     def handle_generate(self):
         try:
-            data = read_excel(Path(self.input_file_path))
-            data = aggregate_data(data)
+            excel_data = read_excel(Path(str(self.input_file_path)))
+            data = aggregate_data(excel_data)
+            city_names = get_city_names(excel_data)
+            self.info(f'Loaded {len(city_names)} city names')
+            raw_links = read_excel(
+                Path(str(self.links_file_path)),
+                sheet_name=1
+            )
+            links = aggregate_links(raw_links, city_names)
 
             document = Document()
             for i, page_data in enumerate(data['pages'], 1):
                 page_data['name'] = f'{i}. {page_data["name"]}'
+                linker = get_linker(i, patterns=links)
                 kwargs = {
                     'document': document,
                     'data': page_data,
                     'banwords': self.banwords,
                     'phone': data['phone'],
+                    'linker': linker,
                 }
                 writer = get_writer(i, **kwargs)
                 self.info(
-                    f'Writing page {i} using {writer.__class__.__name__}...'
+                    f'Writing page {i} using '
+                    f'{writer.__class__.__name__} and '
+                    f'{linker.__class__.__name__}...'
                 )
                 writer.write()
 
