@@ -8,6 +8,9 @@ from docx import Document
 from PyQt6.QtCore import (
     QSize,
     QSettings,
+    QObject,
+    QThread,
+    pyqtSignal,
 )
 from PyQt6.QtWidgets import (
     QApplication,
@@ -35,6 +38,60 @@ COMPANY_NAME = 'Party Bus'
 APPLICATION_NAME = 'Party Bus v1.0'
 
 logger = logging.getLogger('main')
+
+
+class Worker(QObject):
+    finished = pyqtSignal()
+
+    def __init__(self, main_window, document):
+        super().__init__()
+        self.mw : 'MainWindow' = main_window
+        self.document = document
+        self.is_finished = False
+
+    def run(self):
+        try:
+            excel_data = read_excel(
+                Path(str(self.mw.input_file_path))
+            )
+            data = aggregate_data(excel_data)
+            city_names = get_city_names(excel_data)
+            self.mw.info(f'Loaded {len(city_names)} city names')
+            raw_links = read_excel(
+                Path(str(self.mw.links_file_path)),
+                sheet_name=1,
+            )
+            links = aggregate_links(raw_links, city_names)
+
+            for i, page_data in enumerate(data['pages'], 1):
+                page_data['name'] = f'{i}. {page_data["name"]}'
+                linker = get_linker(i, patterns=links)
+                kwargs = {
+                    'document': self.document,
+                    'data': page_data,
+                    'banwords': self.mw.banwords,
+                    'phone': data['phone'],
+                    'linker': linker,
+                }
+                writer = get_writer(i, **kwargs)
+                self.mw.info(
+                    f'Writing page {i} using '
+                    f'{writer.__class__.__name__} and '
+                    f'{linker.__class__.__name__}...'
+                )
+                writer.write()
+
+            self.is_finished = True
+            self.finished.emit()
+
+        except Exception as e:
+            msg = f'An error occurred while generating the file: {e}'
+            self.mw.info(msg)
+            logger.exception(msg)
+
+        finally:
+            if not self.is_finished:
+                self.finished.emit()
 
 
 class MainWindow(QMainWindow):
@@ -72,58 +129,41 @@ class MainWindow(QMainWindow):
         self.preload_links()
 
     def configure_window(self):
-        self.setFixedSize(QSize(400, 400))
+        self.setFixedSize(QSize(600, 400))
         self.setWindowTitle('Party Bus v1.0')
 
     def handle_generate(self):
-        try:
-            excel_data = read_excel(Path(str(self.input_file_path)))
-            data = aggregate_data(excel_data)
-            city_names = get_city_names(excel_data)
-            self.info(f'Loaded {len(city_names)} city names')
-            raw_links = read_excel(
-                Path(str(self.links_file_path)),
-                sheet_name=1
-            )
-            links = aggregate_links(raw_links, city_names)
+        self.thread_ = QThread()
+        self.worker = Worker(self, Document())
+        self.worker.moveToThread(self.thread_)
 
-            document = Document()
-            for i, page_data in enumerate(data['pages'], 1):
-                page_data['name'] = f'{i}. {page_data["name"]}'
-                linker = get_linker(i, patterns=links)
-                kwargs = {
-                    'document': document,
-                    'data': page_data,
-                    'banwords': self.banwords,
-                    'phone': data['phone'],
-                    'linker': linker,
-                }
-                writer = get_writer(i, **kwargs)
-                self.info(
-                    f'Writing page {i} using '
-                    f'{writer.__class__.__name__} and '
-                    f'{linker.__class__.__name__}...'
-                )
-                writer.write()
+        self.enable_generate_button(False)
+        self.thread_.started.connect(self.worker.run)
+        self.worker.finished.connect(self.finished_generate)
+        self.worker.finished.connect(self.thread_.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread_.finished.connect(self.thread_.deleteLater)
+        self.thread_.start()
 
-            filename, _ = QFileDialog.getSaveFileName(
-                self, 'Save File', filter='Document Files (*.docx)',
-            )
-            if not filename:
-                self.info('No save file selected')
-                return
-
-            self.info(f'Saving document to {filename}...')
-            document.save(filename)
-            self.info('Done!')
-
-        except Exception as e:
-            msg = f'An error occurred while generating the file: {e}'
-            self.info(msg)
-            logger.exception(msg)
-
-    def enable_generate_button(self):
+    def enable_generate_button(self, value: bool | None = None):
+        if value is not None:
+            self.generate_button.setEnabled(value)
+            return
         self.generate_button.setEnabled(bool(self.input_file_path))
+
+    def finished_generate(self):
+        self.enable_generate_button(True)
+        document = self.worker.document
+        filename, _ = QFileDialog.getSaveFileName(
+            self, 'Save File', filter='Document Files (*.docx)',
+        )
+        if not filename:
+            self.info('No save file selected')
+            return
+
+        self.info(f'Saving document to {filename}...')
+        document.save(filename)
+        self.info('Done!')
 
     def configure_input_groupbox(self):
         groupbox = QGroupBox('Input')
