@@ -40,6 +40,7 @@ class MainWindow(QMainWindow):
         self.input_file_path = None
         self.banwords_file_path = None
         self.banwords = []
+        self.links_file_path = None
 
         layout = QGridLayout()
 
@@ -62,6 +63,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
         self.info('Application started')
         self.preload_banwords()
+        self.preload_links()
 
     def configure_window(self):
         self.setFixedSize(QSize(400, 400))
@@ -141,7 +143,6 @@ class MainWindow(QMainWindow):
         groupbox.setLayout(grid_layout)
 
         self.banwords_input_text = QLineEdit()
-
         self.banwords_input_text.setReadOnly(True)
         grid_layout.addWidget(QLabel('Banwords:'), 0, 0, 1, 1)
         grid_layout.addWidget(self.banwords_input_text, 0, 1, 1, 2)
@@ -151,6 +152,17 @@ class MainWindow(QMainWindow):
             self.handle_select_bandwords_button
         )
         grid_layout.addWidget(self.select_bandwords_button, 0, 3, 1, 1)
+
+        self.links_input_text = QLineEdit()
+        self.links_input_text.setReadOnly(True)
+        grid_layout.addWidget(QLabel('Links:'), 1, 0, 1, 1)
+        grid_layout.addWidget(self.links_input_text, 1, 1, 1, 2)
+
+        self.select_links_button = QPushButton('Browse')
+        self.select_links_button.clicked.connect(
+            self.handle_select_links_button
+        )
+        grid_layout.addWidget(self.select_links_button, 1, 3, 1, 1)
 
         return groupbox
 
@@ -170,6 +182,18 @@ class MainWindow(QMainWindow):
         except Exception:
             self.info('Faled to load previous banwords file')
 
+    def preload_links(self):
+        try:
+            prev_links_file_path = self.settings.value('links_file_path')
+            if not prev_links_file_path:
+                self.info('No previous links file found')
+                return
+            self.info(f'Loading previous links file {prev_links_file_path}')
+            self.links_input_text.setText(prev_links_file_path)
+            self.links_file_path = prev_links_file_path
+        except Exception:
+            self.info('Faled to load previous links file')
+
     def handle_select_bandwords_button(self):
         file_path = self.get_file_path(
             caption='Select Banwords File',
@@ -183,8 +207,21 @@ class MainWindow(QMainWindow):
         self.info(f'Selected banwords file: {file_path}')
 
         self.settings.setValue('banwords_file_path', file_path)
-        self.banwords = load_banwords(file_path)
+        self.banwords = load_banwords(Path(file_path))
         self.info(f'Loaded {len(self.banwords)} banwords')
+
+    def handle_select_links_button(self):
+        file_path = self.get_file_path(
+            caption='Select Links File',
+            filter='Excel Files (*.xlsx *.xls *.xlsm *.xlsb)',
+        )
+        if not file_path:
+            self.info('No links file selected')
+            return
+        self.settings.setValue('links_file_path', file_path)
+        self.links_file_path = file_path
+        self.links_input_text.setText(file_path)
+        self.info(f'Selected links file: {file_path}')
 
     def configure_logs_groupbox(self):
         groupbox = QGroupBox('Logs')
