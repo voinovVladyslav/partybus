@@ -1,3 +1,0 @@
-1. pyinstaller --clean --noconfirm --windowed main.py
-2. pyinstaller --clean -y --onedir --windowed main.py
-3. pyinstaller --clean -y --onefile --windowed main.py
