@@ -74,3 +74,17 @@ def test_linker_match_start_of_string():
     text = 'country is sdfs'
     rendered_text = linker.render(text)
     assert rendered_text == '<a href="/home/">country</a> is sdfs'
+
+
+def test_linker_does_not_render_keywords_in_href():
+    patterns = [
+        {
+            'header': 'Home',
+            'link': '/home/',
+            'keywords': ['country', 'home']
+        }
+    ]
+    linker = Linker(patterns)
+    text = '<a href="/home/">country</a> is sdfs'
+    rendered_text = linker.render(text)
+    assert rendered_text == '<a href="/home/">country</a> is sdfs'

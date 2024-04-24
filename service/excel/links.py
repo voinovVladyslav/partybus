@@ -78,11 +78,10 @@ def render_city_links(
     keywords: list[str],
     cities: list[str]
 ) -> list[dict]:
-    cities = [city.lower().replace(' ', '-') for city in cities]
     pattern = re.compile(r'city', flags=re.IGNORECASE)
     result = []
     for city in cities:
-        rendered_link = pattern.sub(city, link)
+        rendered_link = pattern.sub(city.lower().replace(' ', '-'), link)
         result.append(
             {
                 'header': header,

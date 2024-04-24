@@ -1,4 +1,4 @@
-import re
+import regex as re
 from copy import deepcopy
 
 
@@ -15,7 +15,8 @@ class Linker:
         for pattern in self.patterns:
             link = r'<a href="{}">\1</a>'.format(pattern['link'])
             keywords = '|'.join([
-                fr'(?<!\">)\b{w}\b(?!<\/a>)' for w in pattern['keywords']
+                fr'(?<!\">|"\/|")\b{w}\b(?!<\/a>|\/"|")'
+                for w in pattern['keywords']
             ])
             regex = re.compile(fr'({keywords})', re.IGNORECASE)
             text = regex.sub(link, text)
