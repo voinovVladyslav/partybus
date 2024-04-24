@@ -1,6 +1,6 @@
 import pytest
 
-from service.links.utils import render_cities
+from service.excel.links import render_cities
 
 
 @pytest.mark.parametrize(

@@ -45,7 +45,7 @@ class Worker(QObject):
 
     def __init__(self, main_window, document):
         super().__init__()
-        self.mw : 'MainWindow' = main_window
+        self.mw: 'MainWindow' = main_window
         self.document = document
         self.is_finished = False
 

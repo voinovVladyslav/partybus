@@ -31,6 +31,10 @@ def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
             results.extend(render_buses(header, link, keywords))
             continue
 
+        if header in ['city_party_bus', 'city_charter_bus']:
+            results.extend(render_city_links(header, link, keywords, cities))
+            continue
+
         results.append({
             'header': header,
             'link': link,
@@ -63,6 +67,29 @@ def render_buses(header: str, link: str, keywords: list[str]) -> list[dict]:
                 'header': header,
                 'link': rendered_link,
                 'keywords': [link.replace('xx', bus) for link in keywords]
+            }
+        )
+    return result
+
+
+def render_city_links(
+    header: str,
+    link: str,
+    keywords: list[str],
+    cities: list[str]
+) -> list[dict]:
+    cities = [city.lower().replace(' ', '-') for city in cities]
+    pattern = re.compile(r'city', flags=re.IGNORECASE)
+    result = []
+    for city in cities:
+        rendered_link = pattern.sub(city, link)
+        result.append(
+            {
+                'header': header,
+                'link': rendered_link,
+                'keywords': sort_by_wordcount(list(set([
+                    pattern.sub(city, keyword) for keyword in keywords
+                ])))
             }
         )
     return result
