@@ -17,7 +17,12 @@ BUSES = [
 ]
 
 
-def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
+def aggregate_links(
+    data: list[list],
+    cities: list[str],
+    company_name: str = ''
+) -> list[dict]:
+
     if not cities:
         cities = []
     data = transpose(data)
@@ -26,6 +31,20 @@ def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
         header = row[0].strip().lower().replace(' ', '_')
         link = row[1].strip()
         keywords = sort_by_wordcount([str(x).strip() for x in row[2:] if x])
+
+        if header == 'home_page':
+            keywords = [
+                w for w in keywords
+                if 'company name' not in w.lower()
+            ]
+            if company_name:
+                keywords.append(company_name)
+            results.append({
+                'header': header,
+                'link': link,
+                'keywords': render_cities(keywords, cities)
+            })
+            continue
 
         if header == 'all_party_bus_pages':
             results.extend(render_buses(header, link, keywords))
@@ -38,7 +57,7 @@ def aggregate_links(data: list[list], cities: list[str]) -> list[dict]:
         results.append({
             'header': header,
             'link': link,
-            'keywords': render_cities(keywords, cities)
+            'keywords': keywords,
         })
 
     return results

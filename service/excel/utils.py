@@ -22,8 +22,10 @@ def sort_by_wordcount(data: list[str]) -> list[str]:
 
 
 def get_city_names(data: list[list]) -> list[str]:
-    cities = set()
+    cities = []
     for row in data[1:]:
         if row[0] and row[1] and not row[2] and not row[3]:
-            cities.add(row[0].strip())
+            city = row[0].strip()
+            if city not in cities:
+                cities.append(city)
     return list(cities)

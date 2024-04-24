@@ -1,5 +1,9 @@
+from service.excel.utils import get_city_names
+
+
 def aggregate_data(data: list[list]) -> dict:
     phone = data[0][1]
+    company_name = data[2][1]
     is_page_active = False
     result = []
     page_data = {}
@@ -22,6 +26,8 @@ def aggregate_data(data: list[list]) -> dict:
             page_data = {}
 
     return {
+        'company_name': company_name,
+        'cities': get_city_names(data),
         'phone': phone,
-        'pages': result
+        'pages': result,
     }

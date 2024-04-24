@@ -29,7 +29,6 @@ from service.excel import (
     read_excel,
     aggregate_data,
     aggregate_links,
-    get_city_names,
 )
 from service.writers.factory import get_writer
 from service.links.factory import get_linker
@@ -55,17 +54,24 @@ class Worker(QObject):
                 Path(str(self.mw.input_file_path))
             )
             data = aggregate_data(excel_data)
-            city_names = get_city_names(excel_data)
-            self.mw.info(f'Loaded {len(city_names)} city names')
+            self.mw.info(f'Loaded {len(data["cities"])} city names')
+            self.mw.info(f'Company name: {data["company_name"]}')
             raw_links = read_excel(
                 Path(str(self.mw.links_file_path)),
                 sheet_name=1,
             )
-            links = aggregate_links(raw_links, city_names)
+            links = aggregate_links(
+                raw_links, data['cities'], company_name=data['company_name']
+            )
 
             for i, page_data in enumerate(data['pages'], 1):
                 page_data['name'] = f'{i}. {page_data["name"]}'
-                linker = get_linker(i, patterns=links)
+                linker = get_linker(
+                    page_number=i,
+                    patterns=links,
+                    cities=data['cities'],
+                    company_name=data['company_name'],
+                )
                 kwargs = {
                     'document': self.document,
                     'data': page_data,
