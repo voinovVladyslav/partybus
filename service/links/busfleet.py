@@ -7,11 +7,7 @@ class BusFleetLinker(Linker):
             'city_party_bus',
             'pricing',
             'services',
-            'airport',
-            'field trip',
-            'wedding',
-            'corporate',
-            'sports',
+            'our-locations',
             'home_page',
         ]
         self.patterns = [
