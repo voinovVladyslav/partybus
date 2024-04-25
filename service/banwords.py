@@ -1,7 +1,8 @@
+from typing import Collection
 from pathlib import Path
 
 
-def load_banwords(file_path: Path) -> set[str]:
+def load_banwords(file_path: Path) -> Collection[str]:
     with open(file_path, 'r') as file:
         return set([line.strip().lower() for line in file.readlines()])
 

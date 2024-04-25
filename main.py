@@ -1,3 +1,4 @@
+from collections.abc import Collection
 import sys
 import logging
 from logging.handlers import RotatingFileHandler
@@ -40,28 +41,34 @@ logger = logging.getLogger('main')
 
 
 class Worker(QObject):
-    finished = pyqtSignal()
+    finished = pyqtSignal(object)
+    info = pyqtSignal(str)
 
-    def __init__(self, main_window, document):
+    def __init__(
+        self,
+        input_file_path: Path,
+        links_file_path: Path,
+        banwords: Collection[str],
+    ):
         super().__init__()
-        self.mw: 'MainWindow' = main_window
-        self.document = document
         self.is_finished = False
+        self.input_file_path = input_file_path
+        self.links_file_path = links_file_path
+        self.document = Document()
+        self.banwords = banwords
 
     def run(self):
         try:
-            excel_data = read_excel(
-                Path(str(self.mw.input_file_path))
-            )
+            excel_data = read_excel(self.input_file_path)
             data = aggregate_data(excel_data)
-            self.mw.info(f'Loaded {len(data["cities"])} city names')
-            self.mw.info(f'Company name: {data["company_name"]}')
-            raw_links = read_excel(
-                Path(str(self.mw.links_file_path)),
-                sheet_name=1,
-            )
+            self.info.emit(f'Loaded {len(data["cities"])} city names')
+            self.info.emit(f'Company name: {data["company_name"]}')
+
+            raw_links = read_excel(self.links_file_path, sheet_name=1)
             links = aggregate_links(
-                raw_links, data['cities'], company_name=data['company_name']
+                raw_links,
+                data['cities'],
+                company_name=data['company_name']
             )
 
             for i, page_data in enumerate(data['pages'], 1):
@@ -78,12 +85,12 @@ class Worker(QObject):
                 kwargs = {
                     'document': self.document,
                     'data': page_data,
-                    'banwords': self.mw.banwords,
+                    'banwords': self.banwords,
                     'phone': data['phone'],
                     'linker': linker,
                 }
                 writer = get_writer(i, **kwargs)
-                self.mw.info(
+                self.info.emit(
                     f'Writing page {i} using '
                     f'{writer.__class__.__name__} and '
                     f'{linker.__class__.__name__}...'
@@ -91,16 +98,16 @@ class Worker(QObject):
                 writer.write()
 
             self.is_finished = True
-            self.finished.emit()
+            self.finished.emit(self.document)
 
         except Exception as e:
             msg = f'An error occurred while generating the file: {e}'
-            self.mw.info(msg)
+            self.info.emit(msg)
             logger.exception(msg)
 
         finally:
             if not self.is_finished:
-                self.finished.emit()
+                self.finished.emit(self.document)
 
 
 class MainWindow(QMainWindow):
@@ -143,12 +150,17 @@ class MainWindow(QMainWindow):
 
     def handle_generate(self):
         self.thread_ = QThread()
-        self.worker = Worker(self, Document())
+        self.worker = Worker(
+            Path(str(self.input_file_path)),
+            Path(str(self.links_file_path)),
+            self.banwords,
+        )
         self.worker.moveToThread(self.thread_)
 
         self.enable_generate_button(False)
         self.thread_.started.connect(self.worker.run)
         self.worker.finished.connect(self.finished_generate)
+        self.worker.info.connect(self.info)
         self.worker.finished.connect(self.thread_.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread_.finished.connect(self.thread_.deleteLater)
@@ -160,9 +172,8 @@ class MainWindow(QMainWindow):
             return
         self.generate_button.setEnabled(bool(self.input_file_path))
 
-    def finished_generate(self):
+    def finished_generate(self, document):
         self.enable_generate_button(True)
-        document = self.worker.document
         filename, _ = QFileDialog.getSaveFileName(
             self, 'Save File', filter='Document Files (*.docx)',
         )
