@@ -7,6 +7,7 @@ from service.phones import strong_phones
 from service.links.base import Linker
 
 RED = RGBColor(255, 0, 0)
+BLUE = RGBColor(0, 0, 255)
 
 
 class BasePageWriter(ABC):
@@ -50,8 +51,22 @@ class BasePageWriter(ABC):
 
         paragraph = self.document.add_paragraph('<p>')
         words = text.split()
+        running_link = False
         for word in words:
             word = word + ' '
+            is_link_start = '<a' in word
+            is_link_end = '</a>' in word
+
+            if is_link_start:
+                running_link = True
+
+            if running_link:
+                if is_link_end:
+                    running_link = False
+                run = paragraph.add_run(word)
+                run.font.color.rgb = BLUE
+                continue
+
             if word.startswith('<p>') and not make_phone_bold:
                 word = '\n' + word
             if is_banword(word.lower(), self.banwords):

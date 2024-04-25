@@ -42,6 +42,8 @@ class Linker:
                 fr'(?<!\">|"\/|")\b{w}\b(?!<\/a>|\/"|")'
                 for w in pattern['keywords']
             ])
+            if not keywords:
+                continue
             regex = re.compile(fr'({keywords})', re.IGNORECASE)
 
             text, n = regex.subn(link, text, count=self.regex_replace_count)

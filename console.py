@@ -46,7 +46,7 @@ for i, page_data in enumerate(data['pages'], 1):
     print(
         f'Writing page {i} using '
         f'{writer.__class__.__name__} '
-        f'and {linker.__class__.__name__}...' + page_data['city_name']
+        f'and {linker.__class__.__name__}...'
     )
     writer.write()
 
