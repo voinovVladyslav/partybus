@@ -33,6 +33,7 @@ for i, page_data in enumerate(data['pages'], 1):
         company_name=data['company_name'],
         regex_replace_count=1,
         break_after_first_match=True,
+        city_name=page_data['city_name'],
     )
     kwargs = {
         'document': document,
@@ -45,7 +46,7 @@ for i, page_data in enumerate(data['pages'], 1):
     print(
         f'Writing page {i} using '
         f'{writer.__class__.__name__} '
-        f'and {linker.__class__.__name__}...'
+        f'and {linker.__class__.__name__}...' + page_data['city_name']
     )
     writer.write()
 

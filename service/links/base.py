@@ -15,9 +15,25 @@ class Linker:
         self.regex_replace_count = regex_replace_count
         self.break_after_first_match = break_after_first_match
         self.filter_patterns()
+        self.filter_current_city()
 
     def filter_patterns(self) -> None:
         pass
+
+    def filter_current_city(self) -> None:
+        city = self.kwargs.get('city_name')
+        if not city:
+            return
+
+        for pattern in self.patterns:
+            if pattern['header'] not in [
+                'city_party_bus', 'city_charter_bus', 'home_page'
+            ]:
+                continue
+            pattern['keywords'] = [
+                w for w in pattern['keywords']
+                if city.lower() not in w.lower()
+            ]
 
     def render(self, text: str) -> str:
         for pattern in self.patterns:
