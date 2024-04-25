@@ -30,7 +30,9 @@ for i, page_data in enumerate(data['pages'], 1):
         page_number=i,
         patterns=links,
         cities=data['cities'],
-        company_name=data['company_name']
+        company_name=data['company_name'],
+        regex_replace_count=1,
+        break_after_first_match=True,
     )
     kwargs = {
         'document': document,

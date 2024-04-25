@@ -71,6 +71,8 @@ class Worker(QObject):
                     patterns=links,
                     cities=data['cities'],
                     company_name=data['company_name'],
+                    regex_replace_count=1,
+                    break_after_first_match=True,
                 )
                 kwargs = {
                     'document': self.document,
