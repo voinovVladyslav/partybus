@@ -9,5 +9,6 @@ class CharterBusPageWriter(BasePageWriter):
                 self.write_heading(row['heading'], 1)
             if 2 <= i <= 13:
                 self.write_heading(row['heading'], 2)
-            self.write_paragraph(row['paragraph'], insert_links=True)
+            insert_links = i < 13
+            self.write_paragraph(row['paragraph'], insert_links=insert_links)
         self.add_page_break()

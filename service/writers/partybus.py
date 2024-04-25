@@ -10,5 +10,8 @@ class PartyBusPageWriter(BasePageWriter):
             if 2 <= i <= 11:
                 self.write_heading(row['heading'], 2)
             make_phone_bold = i <= 10
-            self.write_paragraph(row['paragraph'], make_phone_bold, True)
+            insert_links = i < 11
+            self.write_paragraph(
+                row['paragraph'], make_phone_bold, insert_links
+            )
         self.add_page_break()
