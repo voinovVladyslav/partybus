@@ -11,6 +11,7 @@ class CharterBusLinker(Linker):
             '25_passenger_minibus',
             '56_passenger_minibus',
             'city_party_bus',
+            'city_charter_bus',
         ]
         self.patterns = [
             pattern for pattern in self.patterns
