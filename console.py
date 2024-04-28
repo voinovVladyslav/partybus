@@ -31,8 +31,6 @@ for i, page_data in enumerate(data['pages'], 1):
         patterns=links,
         cities=data['cities'],
         company_name=data['company_name'],
-        regex_replace_count=1,
-        break_after_first_match=True,
         city_name=page_data['city_name'],
     )
     kwargs = {

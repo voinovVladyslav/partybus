@@ -26,7 +26,7 @@ def test_linker_multiple_matches():
     linker = Linker(patterns)
     text = 'This country is my home'
     rendered_text = linker.render(text)
-    assert rendered_text == 'This <a href="/home/">country</a> is my <a href="/home/">home</a>'  # noqa
+    assert rendered_text == 'This <a href="/home/">country</a> is my home'
 
 
 def test_linker_multiple_patterns_multiple_matches():
@@ -88,3 +88,19 @@ def test_linker_does_not_render_keywords_in_href():
     text = '<a href="/home/">country</a> is sdfs'
     rendered_text = linker.render(text)
     assert rendered_text == '<a href="/home/">country</a> is sdfs'
+
+
+def test_linker_does_not_insert_link_twice_for_his_lifetime():
+    patterns = [
+        {
+            'header': 'Home',
+            'link': '/home/',
+            'keywords': ['country', 'home']
+        }
+    ]
+    linker = Linker(patterns)
+    text = 'country is home'
+    rendered_text = linker.render(text)
+    assert rendered_text == '<a href="/home/">country</a> is home'
+    rendered_text = linker.render(rendered_text)
+    assert rendered_text == '<a href="/home/">country</a> is home'
