@@ -9,7 +9,7 @@ class PartyBus2Linker(Linker):
             '18_passenger_minibus',
             '20_passenger_minibus',
             '25_passenger_minibus',
-            '56_passenger_minibus',
+            '56_passenger_charter_bus',
             'city_party_bus',
             'city_charter_bus',
         ]

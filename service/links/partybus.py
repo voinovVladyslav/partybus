@@ -3,11 +3,14 @@ from .base import Linker
 
 class PartyBusLinker(Linker):
     def filter_patterns(self) -> None:
+        exclude = [
+            'city_charter_bus',
+        ]
         headers = [
             '18_passenger_minibus',
             '20_passenger_minibus',
             '25_passenger_minibus',
-            '56_passenger_minibus',
+            '56_passenger_charter_bus',
         ]
 
         rules = []
@@ -28,3 +31,7 @@ class PartyBusLinker(Linker):
                 word for word in pattern['keywords']
                 if word not in rules
             ]
+        self.patterns = [
+            pattern for pattern in self.patterns
+            if pattern['header'] not in exclude
+        ]
