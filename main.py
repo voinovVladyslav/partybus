@@ -94,6 +94,7 @@ class Worker(QObject):
                     f'{linker.__class__.__name__}...'
                 )
                 writer.write()
+                self.info.emit(f'Links replaced: {linker.links_replaced}')
 
             self.is_finished = True
             self.finished.emit(self.document)
