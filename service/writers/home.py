@@ -2,6 +2,14 @@ from .base import BasePageWriter
 
 
 class HomePageWriter(BasePageWriter):
+    def prepare_data(self) -> None:
+        if self.linker is None:
+            return
+        rows = self.data['rows']
+        start, middle, end = rows[:1], rows[1:11], rows[11:]
+        middle = self.linker.render(middle)
+        self.data['rows'] = start + middle + end
+
     def write(self) -> None:
         self.write_title(self.data['name'])
         for i, row in enumerate(self.data['rows'], 1):

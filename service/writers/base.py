@@ -24,6 +24,16 @@ class BasePageWriter(ABC):
         self.document = document
         self.data = data
         self.linker = linker
+        self.prepare_data()
+
+    def prepare_data(self) -> None:
+        '''
+        Hook used to prepare data before writing the document.
+        Basic use case is to insert links to the text.
+        '''
+        if self.linker is None:
+            return
+        self.data['rows'] = self.linker.render(self.data['rows'])
 
     def write_title(self, title: str) -> None:
         self.document.add_heading(title, level=0)

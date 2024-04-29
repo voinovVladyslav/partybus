@@ -47,6 +47,7 @@ for i, page_data in enumerate(data['pages'], 1):
         f'and {linker.__class__.__name__}...'
     )
     writer.write()
+    print('Links replaced:', linker.links_replaced)
 
 print('Saving document...')
 document.save(f'result/{filename}.docx')

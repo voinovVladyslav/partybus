@@ -8,9 +8,9 @@ class Linker:
         patterns: list[dict],
         **kwargs
     ):
+        self.links_replaced = 0
         self.kwargs = kwargs
         self.patterns = deepcopy(patterns)
-        self.matched_links = set()
         self.filter_patterns()
         self.filter_current_city()
 
@@ -32,10 +32,8 @@ class Linker:
                 if city.lower() not in w.lower()
             ]
 
-    def render(self, text: str) -> str:
+    def render(self, rows: list[dict[str, str]]) -> list[dict[str, str]]:
         for pattern in self.patterns:
-            if pattern['link'] in self.matched_links:
-                continue
             link = r'<a href="{}">\1</a>'.format(pattern['link'])
             keywords = '|'.join([
                 fr'(?<!\">|"\/|"|\/a>\s?)\b{w}\b(?!<\/a>|\/"|"|\s?<a)'
@@ -46,11 +44,22 @@ class Linker:
             ])
             if not keywords:
                 continue
-
             regex = re.compile(fr'({keywords})', re.IGNORECASE)
-            text, n = regex.subn(link, text, count=1)
 
-            if n:
-                self.matched_links.add(pattern['link'])
+            biggest_match_len = 0
+            match_idx = None
+            for i, row in enumerate(rows):
+                match = regex.search(row['paragraph'])
+                if match is None:
+                    continue
+                match_len = len(match.group())
+                if match_len > biggest_match_len:
+                    biggest_match_len = match_len
+                    match_idx = i
 
-        return text
+            if match_idx is not None:
+                rows[match_idx]['paragraph'], n = regex.subn(
+                    link, rows[match_idx]['paragraph'], count=1
+                )
+                self.links_replaced += n
+        return rows
