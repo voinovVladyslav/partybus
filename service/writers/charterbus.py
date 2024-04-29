@@ -9,6 +9,11 @@ class CharterBusPageWriter(BasePageWriter):
                 self.write_heading(row['heading'], 1)
             if 2 <= i <= 13:
                 self.write_heading(row['heading'], 2)
+            make_phone_bold = i <= 12
             insert_links = i < 13
-            self.write_paragraph(row['paragraph'], insert_links=insert_links)
+            self.write_paragraph(
+                row['paragraph'],
+                make_phone_bold=make_phone_bold,
+                insert_links=insert_links
+            )
         self.add_page_break()
