@@ -32,22 +32,13 @@ class BasePageWriter(ABC):
         text = self._wrap_tag(f'h{level}', heading)
         self.document.add_heading(text, level=level)
 
-    def insert_links(self, text: str) -> str:
-        if not self.linker:
-            return text
-        return self.linker.render(text)
-
     def write_paragraph(
         self,
         text: str,
         make_phone_bold: bool = False,
-        insert_links: bool = False,
     ) -> None:
         if make_phone_bold:
             text = self._make_phone_bold(text)
-
-        if insert_links:
-            text = self.insert_links(text)
 
         paragraph = self.document.add_paragraph('<p>')
         words = text.split()

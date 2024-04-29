@@ -7,5 +7,5 @@ class BlogPageWriter(BasePageWriter):
         for i, row in enumerate(self.data['rows'], 1):
             if i == 1:
                 self.write_heading(row['heading'], 1)
-            self.write_paragraph(row['paragraph'], insert_links=False)
+            self.write_paragraph(row['paragraph'])
         self.add_page_break()
