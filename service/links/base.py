@@ -38,7 +38,7 @@ class Linker:
                 continue
             link = r'<a href="{}">\1</a>'.format(pattern['link'])
             keywords = '|'.join([
-                fr'(?<!\">|"\/|")\b{w}\b(?!<\/a>|\/"|")'
+                fr'(?<!\">|"\/|"|\/a>\s?)\b{w}\b(?!<\/a>|\/"|"|\s?<a)'
                 for w in pattern['keywords']
             ])
             if not keywords:

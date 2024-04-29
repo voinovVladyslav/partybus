@@ -104,3 +104,41 @@ def test_linker_does_not_insert_link_twice_for_his_lifetime():
     assert rendered_text == '<a href="/home/">country</a> is home'
     rendered_text = linker.render(rendered_text)
     assert rendered_text == '<a href="/home/">country</a> is home'
+
+
+def test_no_two_links_without_separators():
+    patterns = [
+        {
+            'header': 'Home',
+            'link': '/home/',
+            'keywords': ['home']
+        },
+        {
+            'header': 'Country',
+            'link': '/country/',
+            'keywords': ['country']
+        },
+    ]
+    linker = Linker(patterns)
+    text = 'home country'
+    rendered_text = linker.render(text)
+    assert rendered_text == '<a href="/home/">home</a> country'
+
+
+def test_no_two_links_without_separators_reverse():
+    patterns = [
+        {
+            'header': 'Country',
+            'link': '/country/',
+            'keywords': ['country']
+        },
+        {
+            'header': 'Home',
+            'link': '/home/',
+            'keywords': ['home']
+        },
+    ]
+    linker = Linker(patterns)
+    text = 'home country'
+    rendered_text = linker.render(text)
+    assert rendered_text == 'home <a href="/country/">country</a>'
