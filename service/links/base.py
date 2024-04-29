@@ -39,7 +39,10 @@ class Linker:
             link = r'<a href="{}">\1</a>'.format(pattern['link'])
             keywords = '|'.join([
                 fr'(?<!\">|"\/|"|\/a>\s?)\b{w}\b(?!<\/a>|\/"|"|\s?<a)'
+                if not w.isdigit() else
+                fr'(?<!\">|"\/|"|\/a>\s?)\b{w}\b(?!<\/a>|\/"|"|\s?<a|\s?second)'  # noqa
                 for w in pattern['keywords']
+
             ])
             if not keywords:
                 continue

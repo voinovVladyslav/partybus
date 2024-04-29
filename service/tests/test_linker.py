@@ -142,3 +142,31 @@ def test_no_two_links_without_separators_reverse():
     text = 'home country'
     rendered_text = linker.render(text)
     assert rendered_text == 'home <a href="/country/">country</a>'
+
+
+def test_no_link_if_keyword_is_digits_and_next_word_is_seconds():
+    patterns = [
+        {
+            'header': 'partybus',
+            'link': '/44-passenger/',
+            'keywords': ['44']
+        },
+    ]
+    linker = Linker(patterns)
+    text = 'more than 44 seconds'
+    rendered_text = linker.render(text)
+    assert rendered_text == 'more than 44 seconds'
+
+
+def test_link_if_keyword_is_not_digits_and_next_word_is_seconds():
+    patterns = [
+        {
+            'header': 'hello',
+            'link': '/hello/',
+            'keywords': ['hello']
+        },
+    ]
+    linker = Linker(patterns)
+    text = 'more than hello seconds'
+    rendered_text = linker.render(text)
+    assert rendered_text == 'more than <a href="/hello/">hello</a> seconds'
