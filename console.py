@@ -8,7 +8,7 @@ from service.banwords import load_banwords
 from service.writers.factory import get_writer
 
 
-site_name = 'fort_test'
+site_name = 'new_memphis'
 
 
 data = read_excel(Path(f'examples/{site_name}.xlsx'))
@@ -21,7 +21,7 @@ with open(f'examples/{site_name}.json', 'w') as f:
     json.dump(data, f, indent=4)
 
 document = Document()
-for i, page_data in enumerate(data['pages'][1:], 1):
+for i, page_data in enumerate(data['pages'][1:18], 1):
     page_data['name'] = f'{i}. {page_data["name"]}'
     kwargs = {
         'document': document,

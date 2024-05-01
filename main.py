@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
             data = aggregate_data(data)
 
             document = Document()
-            for i, page_data in enumerate(data['pages'][1:], 1):
+            for i, page_data in enumerate(data['pages'][1:18], 1):
                 page_data['name'] = f'{i}. {page_data["name"]}'
                 kwargs = {
                     'document': document,
