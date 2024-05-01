@@ -26,7 +26,7 @@ from service.excel import read_excel, aggregate_data
 from service.writers.factory import get_writer
 
 COMPANY_NAME = 'Party Bus'
-APPLICATION_NAME = 'Party Bus v1.0'
+APPLICATION_NAME = 'Party Bus v2.0'
 
 logger = logging.getLogger('main')
 
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
 
     def configure_window(self):
         self.setFixedSize(QSize(400, 400))
-        self.setWindowTitle('Party Bus v1.0')
+        self.setWindowTitle(APPLICATION_NAME)
 
     def handle_generate(self):
         try:
