@@ -19,13 +19,3 @@ def transpose(data: list[list]) -> list[list]:
 
 def sort_by_wordcount(data: list[str]) -> list[str]:
     return sorted(data, key=lambda x: len(x.split()), reverse=True)
-
-
-def get_city_names(data: list[list]) -> list[str]:
-    cities = []
-    for row in data[1:]:
-        if row[0] and row[1] and not row[2] and not row[3]:
-            city = row[0].strip()
-            if city not in cities:
-                cities.append(city)
-    return list(cities)

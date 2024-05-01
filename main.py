@@ -61,13 +61,17 @@ class Worker(QObject):
         try:
             excel_data = read_excel(self.input_file_path)
             data = aggregate_data(excel_data)
-            self.info.emit(f'Loaded {len(data["cities"])} city names')
+            self.info.emit(f'Home page city: {data["home_page_city"]}')
+            self.info.emit(f'Party bus cities: {data["party_bus_cities"]}')
+            self.info.emit(f'Charter bus cities: {data["charter_bus_cities"]}')
             self.info.emit(f'Company name: {data["company_name"]}')
 
             raw_links = read_excel(self.links_file_path, sheet_name=1)
             links = aggregate_links(
-                raw_links,
-                data['cities'],
+                data=raw_links,
+                home_page_city=data['home_page_city'],
+                party_bus_cities=data['party_bus_cities'],
+                charter_bus_cities=data['charter_bus_cities'],
                 company_name=data['company_name']
             )
 
@@ -76,7 +80,7 @@ class Worker(QObject):
                 linker = get_linker(
                     page_number=i,
                     patterns=links,
-                    cities=data['cities'],
+                    home_page_city=data['home_page_city'],
                     company_name=data['company_name'],
                     city_name=page_data['city_name'],
                 )

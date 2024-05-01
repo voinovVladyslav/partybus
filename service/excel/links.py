@@ -19,12 +19,12 @@ BUSES = [
 
 def aggregate_links(
     data: list[list],
-    cities: list[str],
+    home_page_city: str,
+    party_bus_cities: list[str],
+    charter_bus_cities: list[str],
     company_name: str = ''
 ) -> list[dict]:
 
-    if not cities:
-        cities = []
     data = transpose(data)
     results = []
     for row in data[1:-2]:
@@ -42,7 +42,7 @@ def aggregate_links(
             results.append({
                 'header': header,
                 'link': link,
-                'keywords': render_cities(keywords, cities)
+                'keywords': render_cities(keywords, [home_page_city])
             })
             continue
 
@@ -50,8 +50,16 @@ def aggregate_links(
             results.extend(render_buses(header, link, keywords))
             continue
 
-        if header in ['city_party_bus', 'city_charter_bus']:
-            results.extend(render_city_links(header, link, keywords, cities))
+        if header == 'city_party_bus':
+            results.extend(
+                render_city_links(header, link, keywords, party_bus_cities)
+            )
+            continue
+
+        if header == 'city_charter_bus':
+            results.extend(
+                render_city_links(header, link, keywords, charter_bus_cities)
+            )
             continue
 
         results.append({

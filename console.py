@@ -8,11 +8,13 @@ from service.writers.factory import get_writer
 from service.links.factory import get_linker
 
 
-filename = 'richmond'
+filename = 'fortworth'
 excel_data = read_excel(Path(f'examples/{filename}.xlsx'))
 data = aggregate_data(excel_data)
 
-print(f'Loaded {len(data["cities"])} city names')
+print(f'Home page city: {data["home_page_city"]}')
+print(f'Party bus cities: {data["party_bus_cities"]}')
+print(f'Charter bus cities: {data["charter_bus_cities"]}')
 print(f'Company name: {data["company_name"]}')
 
 banwords = load_banwords(Path('banwords.txt'))
@@ -20,7 +22,11 @@ print(f'Loaded {len(banwords)} banwords')
 
 raw_links = read_excel(Path('examples/links.xlsx'), sheet_name=1)
 links = aggregate_links(
-    raw_links, data['cities'], company_name=data['company_name']
+    data=raw_links,
+    home_page_city=data['home_page_city'],
+    party_bus_cities=data['party_bus_cities'],
+    charter_bus_cities=data['charter_bus_cities'],
+    company_name=data['company_name']
 )
 
 document = Document()
@@ -29,7 +35,7 @@ for i, page_data in enumerate(data['pages'], 1):
     linker = get_linker(
         page_number=i,
         patterns=links,
-        cities=data['cities'],
+        home_page_city=data['home_page_city'],
         company_name=data['company_name'],
         city_name=page_data['city_name'],
     )

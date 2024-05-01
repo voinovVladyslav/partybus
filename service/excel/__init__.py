@@ -1,4 +1,4 @@
-from .utils import read_excel, transpose, sort_by_wordcount, get_city_names
+from .utils import read_excel, transpose, sort_by_wordcount
 from .pages import aggregate_data
 from .links import aggregate_links
 
@@ -9,5 +9,4 @@ __all__ = (
     'aggregate_links',
     'transpose',
     'sort_by_wordcount',
-    'get_city_names'
 )

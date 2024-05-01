@@ -3,7 +3,7 @@ from .base import Linker
 
 class BusFleetLinker(Linker):
     def filter_patterns(self) -> None:
-        first_city = self.kwargs['cities'][0].lower()
+        home_page_city = self.kwargs['home_page_city']
         company_name = self.kwargs['company_name']
         only = [
             'city_party_bus',
@@ -17,7 +17,7 @@ class BusFleetLinker(Linker):
             if pattern['header'] == 'home_page':
                 new_keywords = []
                 for keyword in pattern['keywords']:
-                    if first_city in keyword.lower():
+                    if home_page_city in keyword.lower():
                         continue
                     if company_name and company_name in keyword:
                         continue
