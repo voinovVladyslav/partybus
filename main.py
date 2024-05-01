@@ -35,7 +35,7 @@ from service.writers.factory import get_writer
 from service.links.factory import get_linker
 
 COMPANY_NAME = 'Party Bus'
-APPLICATION_NAME = 'Party Bus v1.0'
+APPLICATION_NAME = 'Party Bus v1.0.1'
 
 logger = logging.getLogger('main')
 
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
 
     def configure_window(self):
         self.setFixedSize(QSize(600, 400))
-        self.setWindowTitle('Party Bus v1.0')
+        self.setWindowTitle(APPLICATION_NAME)
 
     def handle_generate(self):
         self.thread_ = QThread()
